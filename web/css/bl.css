@@ -1,0 +1,105 @@
+@page{
+	margin-top: 0.5cm;
+	margin-left: 0.5cm;
+	margin-right: 0.5cm;
+	margin-bottom: 0.5cm;
+}
+
+.w-100{
+	width: 100%!important;
+}
+
+.m-0{
+	margin: 0px!important;
+}
+
+.p-0{
+	padding: 0px!important;
+}
+
+.border-top{
+	border-top: 1px solid black !important;
+}
+
+.border-bottom{
+	border-bottom: 1px solid black !important;
+}
+
+.border-left{
+	border-left: 1px solid black !important;
+}
+
+.border-right{
+	border-right: 1px solid black !important;
+}
+
+.couriers{
+	font-family: couriers;
+}
+
+.arial{
+	font-family: arial;
+}
+
+.pl1{
+	padding-left: 4px;
+}
+
+.label-header{
+	font-family: arial;
+	font-size: 8px;
+}
+
+.title-draft{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 50px;
+	letter-spacing: 10px;
+	font-weight: bold;
+}
+
+.font1{
+	font-family: Arial;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.font2{
+	font-family: couriers;
+	font-size: 11.5px;
+}
+
+.font3{
+	/* font-family: Arial; */
+	font-family: couriers;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.font4{
+	/* font-family: Arial; */
+	font-family: couriers;
+	font-size: 8px;
+}
+
+.font5{
+	/* font-family: Arial; */
+	font-family: couriers;
+	font-size: 12px;
+}
+
+.rotate{
+	/* Safari */
+	-webkit-transform: rotate(-90deg);
+
+	/* Firefox */
+	-moz-transform: rotate(-90deg);
+
+	/* IE */
+	-ms-transform: rotate(-90deg);
+
+	/* Opera */
+	-o-transform: rotate(-90deg);
+
+	/* Internet Explorer */
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}

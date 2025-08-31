@@ -1,0 +1,81 @@
+@page{
+	margin-top: 1cm;
+	margin-left: 1cm;
+	margin-right: 1cm;
+	margin-bottom: 1cm;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.text-left{
+	text-align: left;
+}
+
+.text-right{
+	text-align: right;
+}
+
+.print-ar-payment,
+.print-ap-payment,
+.print-operational-payment,
+table th, 
+table td{
+	font-family: Arial;
+}
+
+.payment,
+.faktur,
+.pph{
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.title1{
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.title1a{
+	font-size: 18px;
+}
+
+.border-top td{
+	border-top: 1px solid black;
+}
+
+.border-bottom td{
+	border-bottom: 1px solid black;
+}
+
+.table-detail-inv thead td,
+.table-detail-cost thead td,
+.table-detail-operational thead td{
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	padding: 5px 2px !important;
+}
+
+.table-detail-inv tbody td,
+.table-detail-cost tbody td,
+.table-detail-operational tbody td{
+	border: none;
+	padding: 5px 2px !important;
+}
+
+
+
+.table-detail-inv,
+.table-detail-cost,
+.table-detail-payment,
+.table-detail-operational{
+	border-collapse: collapse;
+	font-size: 12px;
+	width: 100%;
+}
+
+.table-detail-payment td{
+	border: 1px solid black;
+	padding: 3px 5px !important;
+}

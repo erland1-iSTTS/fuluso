@@ -1,0 +1,66 @@
+@page{
+	margin-top: 0.5cm;
+	margin-left: 0.5cm;
+	margin-right: 0.5cm;
+	margin-bottom: 0.5cm;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.text-left{
+	text-align: left;
+}
+
+.text-right{
+	text-align: right;
+}
+
+.arial{
+	font-family: Arial;
+}
+
+#print-invoice-idr,
+#print-cost-idr{
+	font-family: Arial;
+	font-size: 12px;
+	color: black;
+}
+
+.title1{
+	font-size: 18pt; 
+	letter-spacing: 1px;
+}
+
+.title2{
+	font-size: 7pt;
+}
+
+.border-top td{
+	border-top: 1px solid black;
+}
+
+.border-bottom td{
+	border-bottom: 1px solid black;
+}
+
+.border-top-bottom td{
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+#table_invoice_detail,
+#table_invoice_detail_footer,
+#table_cost_detail{
+	border-collapse: collapse;
+	width: 100%;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+#table_invoice_detail td,
+#table_invoice_detail_footer td,
+#table_cost_detail td{
+	padding: 5px 2px;
+}

@@ -1,0 +1,163 @@
+<?php
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\grid\GridView;
+use yii\grid\ActionColumn;
+use yii\widgets\ActiveForm;
+use yii\bootstrap4\Modal;
+
+$this->title = 'Master Vessel & Routing';
+?>
+
+<style>
+	.table-custom th {
+		background-color: #ddd;
+	}
+	
+	.table-custom th a{
+		color: black;
+	}
+	
+	/* Custom Pagination */
+	.pagination li{
+		padding: 5px 10px;
+		margin: 0px 2px;
+		
+		border: 1px solid #343a40;
+		border-radius: 3px;
+	}
+	
+	.pagination li a{
+		color: black;
+	}
+	
+	.pagination li.active{
+		background-color: #343a40;
+	}
+	
+	.pagination li.active a{
+		color: white;
+	}
+</style>
+
+<div class="vessel-routing-index">
+	<h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('ADD', ['create'], ['class' => 'btn btn-dark']) ?>
+    </p>
+	
+    <?= GridView::widget([
+	
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+		'layout'=>'{items}{pager}',
+		'tableOptions' => ['id' => 'table-master-batch','class' => 'table table-custom'],
+        'columns' => [
+            [
+				'class' => 'yii\grid\SerialColumn',
+				'headerOptions' => ['class' => 'text-center'],
+				'contentOptions'=> ['style'=>'text-align:center;width:70px;'],
+			],
+			[
+				'attribute' => 'id',
+				'contentOptions'=>['style' => 'width:100px'],
+				'value' => function ($model){
+                    return 'BT'.sprintf('%08d', $model->id);
+                },
+			],
+			[
+				'attribute' => 'start',
+				'label' => 'PoL / Vessel / Voyage / DoD',
+				'contentOptions'=>['style' => 'width:35%'],
+				'value' => function ($model){
+                    return $model->point_start.'/'.$model->vessel_start.'/'.$model->voyage_start.'/'.$model->date_start;
+                },
+			],
+			[
+				'attribute' => 'end',
+				'label' => 'LFP / Vessel / Voyage / DoD',
+				'contentOptions'=>['style' => 'width:35%'],
+				'value' => function ($model){
+                    return $model->point_end.'/'.$model->vessel_end.'/'.$model->voyage_end.'/'.$model->date_end;
+                },
+			],
+            [
+				'class' => 'yii\grid\ActionColumn',
+				// 'template'=>'{copy_new}{view}{update}{delete}',
+				// 'contentOptions'=>['style' => 'width:280px'],
+				'template'=>'{view}{update}{delete}',
+				'contentOptions'=>['style' => 'width:70px'],
+				'buttons'=>[
+					'copy_new'=>function($url, $model){
+						return Html::a('Copy New', ['#'], [
+							'title' => 'view',
+							'class' => 'btn btn-dark',
+							'style' => 'margin:0px 5px',
+						]);
+					},
+					'view'=>function($url, $model){
+						$icon = '<svg aria-hidden="true" style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1.125em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#343a40" d="M573 241C518 136 411 64 288 64S58 136 3 241a32 32 0 000 30c55 105 162 177 285 177s230-72 285-177a32 32 0 000-30zM288 400a144 144 0 11144-144 144 144 0 01-144 144zm0-240a95 95 0 00-25 4 48 48 0 01-67 67 96 96 0 1092-71z"></path></svg>';
+						return Html::a($icon, ['view', 'id'=>$model->id], [
+							'title' => 'view',
+							'style' => 'padding:0px 2px',
+						]);
+					},
+					'update'=>function($url, $model){
+						$icon = '<svg aria-hidden="true" style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#343a40" d="M498 142l-46 46c-5 5-13 5-17 0L324 77c-5-5-5-12 0-17l46-46c19-19 49-19 68 0l60 60c19 19 19 49 0 68zm-214-42L22 362 0 484c-3 16 12 30 28 28l122-22 262-262c5-5 5-13 0-17L301 100c-4-5-12-5-17 0zM124 340c-5-6-5-14 0-20l154-154c6-5 14-5 20 0s5 14 0 20L144 340c-6 5-14 5-20 0zm-36 84h48v36l-64 12-32-31 12-65h36v48z"></path></svg>';
+						return Html::a($icon, ['update', 'id'=>$model->id], [
+							'title' => 'Update',
+							'style' => 'padding:0px 2px',
+						]);
+					},
+					'delete'=>function($url, $model){
+						$icon = '<svg aria-hidden="true" style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:.875em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#343a40" d="M32 464a48 48 0 0048 48h288a48 48 0 0048-48V128H32zm272-256a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zM432 32H312l-9-19a24 24 0 00-22-13H167a24 24 0 00-22 13l-9 19H16A16 16 0 000 48v32a16 16 0 0016 16h416a16 16 0 0016-16V48a16 16 0 00-16-16z"></path></svg>';
+						return Html::button($icon, [
+							'class'=>'pl-1 pr-1',
+							'style'=>'text-decoration:none;border:none;background-color:transparent',
+							'title'=>'Delete',
+							'onclick'=>'delete_vessel_routing("'.$model->id.'")',
+						]);
+					},
+				],
+            ],
+        ],
+    ]); ?>
+	
+	<?php
+		Modal::begin([
+			'title' => 'Confirmation',
+			'id' => 'modal_delete',
+		]);
+	?>
+	<div class="modal-delete-vessel-routing">
+		<?php $form = ActiveForm::begin(['action'=>'delete']); ?>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-12 text-center">
+						Are you sure you want to delete ?
+						<input type="hidden" name="MasterVesselRouting[id]" id="id_vessel_routing">
+					</div>
+				</div>
+				
+				<div class="row mt-4 mb-3">
+					<div class="offset-3 col-3">
+						<?= Html::button('Cancel', ['class' => 'btn btn-default', 'data-dismiss' => 'modal', 'style'=>'width:100%']) ?>
+					</div>
+					<div class="col-3 pl-0">
+						<?= Html::submitButton('Save', ['class' => 'btn btn-dark', 'style'=>'width:100%']) ?>
+					</div>
+				</div>
+			</div>
+		<?php ActiveForm::end(); ?>
+	</div>
+	<?php Modal::end(); ?>
+</div>
+
+<script>
+	function delete_vessel_routing(id){
+		$('#id_vessel_routing').val(id);
+		$('#modal_delete').modal({backdrop: 'static', keyboard: false});
+		$('#modal_delete').show();
+	}
+</script>

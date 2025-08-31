@@ -1,0 +1,59 @@
+@page{
+	margin-top: 1cm;
+	margin-left: 1cm;
+	margin-right: 1cm;
+	margin-bottom: 1cm;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.text-left{
+	text-align: left;
+}
+
+.text-right{
+	text-align: right;
+}
+
+.arial{
+	font-family: Arial;
+}
+
+.calibri{
+	font-family: Calibri;
+}
+
+.border-right{
+	border-right: 1px solid black;
+}
+
+.border-left{
+	border-left: 1px solid black;
+}
+
+.border-top{
+	border-top: 1px solid black;
+}
+
+.border-bottom{
+	border-bottom: 1px solid black;
+}
+
+.bordered{
+	border: 1px solid black;
+}
+
+.report-bank table,
+.report-cash table{
+	border-collapse: collapse;
+	width: 100%;
+	font-family: Arial;
+	font-size: 10px;
+}
+
+.report-bank table td,
+.report-cash table td{
+	padding: 7px 3px;
+}
