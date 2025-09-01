@@ -221,7 +221,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= ($ppn->name . " - " . $ppn->amount) != null ? $ppn->name . " - " . $ppn->amount : '' ?></span>
+										<span><?= ($ppn->name) != null ? $ppn->name : '' ?>-<?= ($ppn->amount) != null ? $ppn->amount : '' ?> %</span>
 										<!-- <select class="form-select form-select-lg cost_ppntype" id="cost_ppntype-1" name="MasterNewJobcostDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost()" required>
 											<option value="0"></option> -->
 											<?php
@@ -237,11 +237,11 @@ date_default_timezone_set('Asia/Jakarta');
 												// }
 											?>
 										<!-- </select> -->
-										<input type="hidden" class="form-control cost_ppn" id="cost_ppn-1" value="<?= $ppn->id ?>" name="MasterNewJobcostDetail[detail][1][vchd_ppn]">
+										<input type="hidden" class="form-control cost_ppn" id="cost_ppn-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobcostDetail[detail][1][vchd_ppn]">
 									</td>
 									<td>
-										<span><?= ($pph->name . " - " . $pph->amount) != null ? $pph->name . " - " . $pph->amount : '' ?></span>
-										<input type="hidden" class="form-control cost_pph" id="cost_pph-1" value="<?= $pph->id ?>" name="MasterNewJobcostDetail[detail][1][vchd_pph]">
+										<span><?= ($pph->name) != null ? $pph->name : '' ?>-<?= ($pph->amount) != null ? $pph->amount : '' ?> %</span>
+										<input type="hidden" class="form-control cost_pph" id="cost_pph-1" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobcostDetail[detail][1][vchd_pph]">
 									</td>
 								</tr>
 								
@@ -412,7 +412,7 @@ date_default_timezone_set('Asia/Jakarta');
 						// }
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn-'+i+'" value="<?= $ppn->id ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn-'+i+'" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
 			item += '</td>';
 			item += '<td>';
 					item += "<label>" + "<?= ($pph->name) != null ? $pph->name : '' ?>" + " - " + "<?= ($pph->amount) != null ? $pph->amount : '' ?>" + "</label>";

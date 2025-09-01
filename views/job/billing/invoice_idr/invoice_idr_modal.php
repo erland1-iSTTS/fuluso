@@ -330,11 +330,11 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= ($ppn->name . " - " . $ppn->amount) != null ? ($ppn->name . " - " . $ppn->amount) . "%" : '' ?></span>
+										<span><?= ($ppn->name) != null ? $ppn->name : '' ?>-<?= ($ppn->amount) != null ? $ppn->amount : '' ?> %</span>
 										<input type="hidden" class="form-control ppn" id="ppn-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
 									</td>
 									<td>
-										<span><?= ($pph->name . " - " . $pph->amount) != null ? ($pph->name . " - " . $pph->amount) . "%" : '' ?></span>
+										<span><?= ($pph->name) != null ? $pph->name : '' ?>-<?= ($pph->amount) != null ? $pph->amount : '' ?> %</span>
 										<input type="hidden" class="form-control pph" id="pph-1" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_pph]">
 									</td>
 								</tr>
@@ -564,7 +564,7 @@ date_default_timezone_set('Asia/Jakarta');
 						//}
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control ppn" id="ppn-'+i+'" value="<?= $ppn->id ?>" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn]">';
+				item += '<input type="hidden" class="form-control ppn" id="ppn-'+i+'" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn]">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg ppntype" id="ppntype-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_id_ppn]" onchange="getTotal()" required>';
