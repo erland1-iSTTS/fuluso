@@ -33,6 +33,10 @@ $office 	= Office::find()->all();
 $ppn		= PpnDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
 $pph		= PphDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
 
+if($ppn == null || empty($ppn)){
+	echo "<script>alert('Tidak ada PPN yang valid')</script>";
+}
+
 date_default_timezone_set('Asia/Jakarta');
 ?>
 
@@ -184,7 +188,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= $ppn->name.'-'.$ppn->amount.' %' ?></span>
+										<span><?= ($ppn->name) != null ? $ppn->name : '' ?>-<?= ($ppn->amount) != null ? $ppn->amount : '' ?> %</span>
 										<!-- <select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost_misc()" required>
 											<option value="0"></option> -->
 											<?php
@@ -200,10 +204,10 @@ date_default_timezone_set('Asia/Jakarta');
 												// }
 											?>
 										<!-- </select> -->
-										<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-1" value="<?= $ppn->id ?>" name="MasterNewCostmiscDetail[detail][1][vchd_ppn]">
+										<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewCostmiscDetail[detail][1][vchd_ppn]">
 									</td>
 									<td>
-										<span><?= $pph->name.'-'.$pph->amount.' %' ?></span>
+										<span><?= ($pph->name) != null ? $pph->name : '' ?>-<?= ($pph->amount) != null ? $pph->amount : '' ?> %</span>
 										<!-- <select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost_misc()" required>
 											<option value="0"></option> -->
 											<?php
@@ -219,7 +223,7 @@ date_default_timezone_set('Asia/Jakarta');
 												// }
 											?>
 										<!-- </select> -->
-										<input type="hidden" class="form-control cost_pph_misc" id="cost_pph_misc-1" value="<?= $pph->id ?>" name="MasterNewCostmiscDetail[detail][1][vchd_pph]">
+										<input type="hidden" class="form-control cost_pph_misc" id="cost_pph_misc-1" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewCostmiscDetail[detail][1][vchd_pph]">
 									</td>
 								</tr>
 								
@@ -355,7 +359,7 @@ date_default_timezone_set('Asia/Jakarta');
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-'+i+'" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost_misc()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= $ppn->name.'-'.$ppn->amount.'%' ?> + "<?php
+					item += <?= ($ppn->name) != null ? $ppn->name : '' ?> + "-" + <?= ($ppn->amount) != null ? $ppn->amount : '' ?> + "<?php
 						// foreach($ppn as $row){
 						// 	$name = explode('-', $row['name']);
 						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
@@ -368,12 +372,12 @@ date_default_timezone_set('Asia/Jakarta');
 						// }
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-'+i+'" value="<?= $ppn->id ?>" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-'+i+'" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_ppn]">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-'+i+'" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost_misc()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= $pph->name.'-'.$pph->amount.'%' ?> + "<?php
+					item += <?= ($pph->name) != null ? $pph->name : '' ?> + "-" + <?= ($pph->amount) != null ? $pph->amount : '' ?> + "<?php
 						// foreach($ppn as $row){
 						// 	$name = explode('-', $row['name']);
 						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
@@ -386,7 +390,7 @@ date_default_timezone_set('Asia/Jakarta');
 						// }
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_pph_misc" id="cost_pph_misc-'+i+'" value="<?= $pph->id ?>" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_pph]">';
+				item += '<input type="hidden" class="form-control cost_pph_misc" id="cost_pph_misc-'+i+'" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_pph]">';
 			item += '</td>';
 		item += '</tr>';
 		

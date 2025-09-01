@@ -51,6 +51,10 @@ $pph		= PphDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
 	// $id_customer_alias = '';
 // }
 
+if($ppn == null || empty($ppn)){
+	echo "<script>alert('Tidak ada PPN yang valid')</script>";
+}
+
 date_default_timezone_set('Asia/Jakarta');
 ?>
 
@@ -650,7 +654,7 @@ date_default_timezone_set('Asia/Jakarta');
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype" id="cost_ppntype_hmc-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCostHmc()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= $ppn->name.'-'.$ppn->amount ?> + "<?php
+					item += <?= ($ppn->name) != null ? $ppn->name : '' ?> + "-" + <?= ($ppn->amount) != null ? $ppn->amount : '' ?> + "<?php
 						// foreach($ppn as $row){
 						// 	$name = explode('-', $row['name']);
 						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
@@ -663,12 +667,12 @@ date_default_timezone_set('Asia/Jakarta');
 						// }
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn_hmc-'+i+'" value="<?= $ppn->id ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn_hmc-'+i+'" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype" id="cost_ppntype_hmc-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCostHmc()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= $pph->name.'-'.$pph->amount ?> + "<?php
+					item += <?= ($pph->name) != null ? $pph->name : '' ?> + "-" + <?= ($pph->amount) != null ? $pph->amount : '' ?> + "<?php
 						// foreach($ppn as $row){
 						// 	$name = explode('-', $row['name']);
 						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
@@ -681,7 +685,7 @@ date_default_timezone_set('Asia/Jakarta');
 						// }
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_ppn" id="cost_pph_hmc-'+i+'" value="<?= $pph->id ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph]">';
+				item += '<input type="hidden" class="form-control cost_ppn" id="cost_pph_hmc-'+i+'" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph]">';
 			item += '</td>';
 		item += '</tr>';
 		

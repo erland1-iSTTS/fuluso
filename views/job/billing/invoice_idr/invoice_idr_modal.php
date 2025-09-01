@@ -34,10 +34,8 @@ $office 	= Office::find()->all();
 $ppn = PpnDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
 $pph = PphDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
 
-if ($ppn) {
-    echo "<script>console.log('PPN Name: ".$ppn->name."');</script>";
-} else {
-    echo "<script>console.log('No valid PPN found');</script>";
+if($ppn == null || empty($ppn)){
+	echo "<script>alert('Tidak ada PPN yang valid')</script>";
 }
 // Input Customer dr Job Party
 $job_party = JobParty::find()->where(['id_job' => $_GET['id'],'is_active' => 1])->one();
@@ -332,12 +330,12 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= $ppn->name . " - " . $ppn->amount . "%" ?></span>
-										<input type="hidden" class="form-control ppn" id="ppn-1" value="<?= $ppn->id ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
+										<span><?= ($ppn->name . " - " . $ppn->amount) != null ? ($ppn->name . " - " . $ppn->amount) . "%" : '' ?></span>
+										<input type="hidden" class="form-control ppn" id="ppn-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
 									</td>
 									<td>
-										<span><?= $pph->name . " - " . $pph->amount . "%" ?></span>
-										<input type="hidden" class="form-control pph" id="pph-1" value="<?= $pph->id ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_pph]">
+										<span><?= ($pph->name . " - " . $pph->amount) != null ? ($pph->name . " - " . $pph->amount) . "%" : '' ?></span>
+										<input type="hidden" class="form-control pph" id="pph-1" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_pph]">
 									</td>
 								</tr>
 								
@@ -549,7 +547,7 @@ date_default_timezone_set('Asia/Jakarta');
 			
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg ppntype" id="ppntype-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_id_ppn]" onchange="getTotal()" required>';
-					item += "<label>" + "<?= $ppn->name ?>" + " - " + "<?= $ppn->amount ?>" + "</label>" +"<?php
+					item += "<label>" + "<?= ($ppn->name) != null ? $ppn->name : '' ?>" + " - " + "<?= ($ppn->amount) != null ? $ppn->amount : '' ?>" + "</label>" +"<?php
 						//foreach($ppn as $row){
 							//$name = explode('-', $row['name']);
 							// $name_ppn = $row['name'].'-'.$row['amount'].'%';
@@ -570,7 +568,7 @@ date_default_timezone_set('Asia/Jakarta');
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg ppntype" id="ppntype-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_id_ppn]" onchange="getTotal()" required>';
-					item += "<label>" + "<?= $pph->name ?>" + " - " + "<?= $pph->amount ?>" + "</label>" +"<?php
+					item += "<label>" + "<?= ($pph->name) != null ? $pph->name : '' ?>" + " - " + "<?= ($pph->amount) != null ? $pph->amount : '' ?>" + "</label>" +"<?php
 						//foreach($ppn as $row){
 							//$name = explode('-', $row['name']);
 							// $name_ppn = $row['name'].'-'.$row['amount'].'%';
@@ -587,7 +585,7 @@ date_default_timezone_set('Asia/Jakarta');
 						//}
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control pph" id="pph-'+i+'" value="<?= $pph->id ?>" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pph]">';
+				item += '<input type="hidden" class="form-control pph" id="pph-'+i+'" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pph]">';
 			item += '</td>';
 		item += '</tr>';
 		
