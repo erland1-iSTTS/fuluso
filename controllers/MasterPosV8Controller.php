@@ -73,6 +73,9 @@ class MasterPosV8Controller extends Controller
 				if($model->save()){
 					return $this->redirect(['index']);
 				}
+                else{
+                    return var_dump($model->getErrors());
+                }
             }
         }else{
             $model->loadDefaultValues();

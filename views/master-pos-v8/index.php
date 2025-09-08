@@ -126,7 +126,7 @@ date_default_timezone_set('Asia/Jakarta');
 					<?= 
 						$form->field($model, 'id_detail_ppn')->widget(Select2::class, [
 							'data' => ArrayHelper::map(PpnDetail::find()->all(), 'id', 'name'),
-							'options' => ['placeholder' => 'Select PPN'],
+							'options' => ['placeholder' => 'Select PPN' , 'id' => 'id_detail_ppn'],
 							'pluginOptions' => ['allowClear' => true],
 						]);
 					?>
@@ -134,7 +134,7 @@ date_default_timezone_set('Asia/Jakarta');
 				<div class="col-3">
 					<?= $form->field($model, 'id_detail_pph')->widget(Select2::class, [
 						'data' => ArrayHelper::map(PphDetail::find()->all(), 'id', 'name'),
-						'options' => ['placeholder' => 'Select PPH'],
+						'options' => ['placeholder' => 'Select PPH' , 'id' => 'id_detail_pph'],
 						'pluginOptions' => ['allowClear' => true],
 					]);
 					?>
@@ -322,7 +322,10 @@ date_default_timezone_set('Asia/Jakarta');
 				
 				$('#posv8-pos_validity_begin').val(result.pos_validity_begin);
 				$('#posv8-pos_validity_end').val(result.pos_validity_end);
-				
+
+				$('#id_detail_ppn').val(result.id_detail_ppn).change();
+				$('#id_detail_pph').val(result.id_detail_pph).change();
+
 				if(result.pos_jenis == 1){
 					$('#posv8-pos_jenis input:eq(0)').prop('checked', true);
 					$('#posv8-pos_jenis input:eq(1)').prop('checked', false);

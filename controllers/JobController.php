@@ -1703,7 +1703,25 @@ class JobController extends BaseController
 		$mpdf->WriteHTML($content);
 		$mpdf->Output($filename.'.pdf', 'I');
 	}
-	
+
+	public function actionGetPosDetails($id) {
+		$pos = PosV8::find()->where(['pos_id' => $id])->one();
+		if ($pos) {
+			$result = array(
+				'detail_ppn_name' => $pos->detailPpn->name, 
+				'detail_pph_name' => $pos->detailPph->name,
+				'detail_pph_id' => $pos->detailPph->id,
+				'detail_ppn_id' => $pos->detailPpn->id,
+				'detail_ppn_amount' => $pos->detailPpn->amount,
+				'detail_pph_name' => $pos->detailPph->name,
+				'detail_pph_id' => $pos->detailPph->id,
+				'detail_pph_amount' => $pos->detailPph->amount,
+			);
+			return $this->asJson($result);
+		}
+		return $this->asJson(null);
+	}
+
 	public function penyebut($nilai) {
 		$nilai = abs($nilai);
 		$huruf = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");

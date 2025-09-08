@@ -147,7 +147,7 @@ date_default_timezone_set('Asia/Jakarta');
 								<tr>
 									<td class="text-center"></td>
 									<td>
-										<select class="form-select form-select-lg" id="cost_pos-1" name="MasterNewJobcostDetail[detail][1][vchd_pos]" required>
+										<select class="form-select form-select-lg" id="cost_pos-1" name="MasterNewJobcostDetail[detail][1][vchd_pos]" onchange="updatePos(this.value, 1)" required>
 											<option value="" disabled hidden></option>
 											<?php
 												foreach($pos as $row){
@@ -221,7 +221,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= ($ppn->name) != null ? $ppn->name : '' ?>-<?= ($ppn->amount) != null ? $ppn->amount : '' ?> %</span>
+										<span id="cost_ppn-span-1">-</span>
 										<!-- <select class="form-select form-select-lg cost_ppntype" id="cost_ppntype-1" name="MasterNewJobcostDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost()" required>
 											<option value="0"></option> -->
 											<?php
@@ -237,11 +237,11 @@ date_default_timezone_set('Asia/Jakarta');
 												// }
 											?>
 										<!-- </select> -->
-										<input type="hidden" class="form-control cost_ppn" id="cost_ppn-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobcostDetail[detail][1][vchd_ppn]">
+										<input type="hidden" class="form-control cost_ppn" id="cost_ppn-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_ppn]">
 									</td>
 									<td>
-										<span><?= ($pph->name) != null ? $pph->name : '' ?>-<?= ($pph->amount) != null ? $pph->amount : '' ?> %</span>
-										<input type="hidden" class="form-control cost_pph" id="cost_pph-1" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobcostDetail[detail][1][vchd_pph]">
+										<span id="cost_pph-span-1">-</span>
+										<input type="hidden" class="form-control cost_pph" id="cost_pph-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_pph]">
 									</td>
 								</tr>
 								
@@ -321,7 +321,7 @@ date_default_timezone_set('Asia/Jakarta');
 				item += '</button>';
 			item += '</td>';
 			item += '<td>';
-				item += '<select class="form-select form-select-lg" id="cost_pos-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pos]" required>';
+				item += '<select class="form-select form-select-lg" id="cost_pos-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pos]" onchange="updatePos(this.value , '+i+')" required>';
 					item += '<option value="" disabled selected hidden></option>';
 					item += "<?php
 						foreach($pos as $row){
@@ -399,7 +399,7 @@ date_default_timezone_set('Asia/Jakarta');
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype" id="cost_ppntype-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost()" required>';
 				// 	item += '<option value="0"></option>';
-					item += "<label>" + "<?= ($ppn->name) != null ? $ppn->name : '' ?>" + " - " + "<?= ($ppn->amount) != null ? $ppn->amount : '' ?>" + "</label>" +"<?php
+					item += "<span id='cost_ppn-span-" + i + "'>-</span>" +"<?php
 						// foreach($ppn as $row){
 						// 	//$name = explode('-', $row['name']);
 						// 	$name_ppn = $row['name'].'-'.$row['amount'].'%';
@@ -412,11 +412,11 @@ date_default_timezone_set('Asia/Jakarta');
 						// }
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn-'+i+'" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn-'+i+'" value="0" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
 			item += '</td>';
 			item += '<td>';
-					item += "<label>" + "<?= ($pph->name) != null ? $pph->name : '' ?>" + " - " + "<?= ($pph->amount) != null ? $pph->amount : '' ?>" + "</label>";
-				item += '<input type="hidden" class="form-control cost_pph" id="cost_pph-'+i+'" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph]">';
+					item += "<span id='cost_pph-span-" + i + "'>-</span>";
+				item += '<input type="hidden" class="form-control cost_pph" id="cost_pph-'+i+'" value="0" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph]">';
 			item += '</td>';
 		item += '</tr>';
 		
@@ -441,6 +441,24 @@ date_default_timezone_set('Asia/Jakarta');
 				
 				$('.cost_tarif').eq(i).val(tarif);
 			});
+		});
+	}
+
+	function updatePos(val , idx){
+		// alert(val);
+		fetch('<?= Url::base() ?>/job/get-pos-details?id=' + val)
+		.then(response => response.json())
+		.then(data => {
+			if(data){
+				//console.log(data);
+				$('#cost_ppn-span-'+idx).text(data.detail_ppn_name + '-' + data.detail_ppn_amount + ' %');
+				$('#cost_pph-span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
+				$('#cost_pph-'+idx).val(data.detail_pph_id);
+				$('#cost_ppn-'+idx).val(data.detail_ppn_id);
+			}
+			else{
+				alert('Data tidak ditemukan');
+			}
 		});
 	}
 	

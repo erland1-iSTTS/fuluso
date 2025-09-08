@@ -136,6 +136,24 @@ class CostOtherController extends BaseController
             $model->loadDefaultValues();
         }
 	}
+
+	public function actionGetPosDetails($id) {
+		$pos = PosV8::find()->where(['pos_id' => $id])->one();
+		if ($pos) {
+			$result = array(
+				'detail_ppn_name' => $pos->detailPpn->name, 
+				'detail_pph_name' => $pos->detailPph->name,
+				'detail_pph_id' => $pos->detailPph->id,
+				'detail_ppn_id' => $pos->detailPpn->id,
+				'detail_ppn_amount' => $pos->detailPpn->amount,
+				'detail_pph_name' => $pos->detailPph->name,
+				'detail_pph_id' => $pos->detailPph->id,
+				'detail_pph_amount' => $pos->detailPph->amount,
+			);
+			return $this->asJson($result);
+		}
+		return $this->asJson(null);
+	}
 	
 	/* Asli
 	

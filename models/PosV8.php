@@ -39,4 +39,12 @@ class PosV8 extends \yii\db\ActiveRecord
             'is_active' => 'Is Active',
         ];
     }
+
+    public function getDetailPpn(){
+        return $this->hasOne(PpnDetail::className(), ['id' => 'id_detail_ppn']);
+    }
+
+    public function getDetailPph(){
+        return $this->hasOne(PphDetail::className(), ['id' => 'id_detail_pph']);
+    }
 }

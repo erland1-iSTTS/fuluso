@@ -256,7 +256,7 @@ date_default_timezone_set('Asia/Jakarta');
 								<tr>
 									<td class="text-center"></td>
 									<td>
-										<select class="form-select form-select-lg" id="pos-1" name="MasterNewJobinvoiceDetail[detail][1][invd_pos]" required>
+										<select class="form-select form-select-lg" id="pos-1" name="MasterNewJobinvoiceDetail[detail][1][invd_pos]" onchange="updatePosInv(this.value , 1)" required>
 											<option value="" disabled hidden></option>
 											<?php
 												foreach($pos as $row){
@@ -330,12 +330,12 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= ($ppn->name) != null ? $ppn->name : '' ?>-<?= ($ppn->amount) != null ? $ppn->amount : '' ?> %</span>
-										<input type="hidden" class="form-control ppn" id="ppn-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
+										<span id="ppn-span-1">-</span>
+										<input type="hidden" class="form-control ppn" id="ppn-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
 									</td>
 									<td>
-										<span><?= ($pph->name) != null ? $pph->name : '' ?>-<?= ($pph->amount) != null ? $pph->amount : '' ?> %</span>
-										<input type="hidden" class="form-control pph" id="pph-1" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobinvoiceDetail[detail][1][invd_pph]">
+										<span id="pph-span-1">-</span>
+										<input type="hidden" class="form-control pph" id="pph-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_pph]">
 									</td>
 								</tr>
 								
@@ -396,6 +396,7 @@ date_default_timezone_set('Asia/Jakarta');
 
 <script>
 	$(document).ready(function(){
+		// Bind the change event for initial pos select
 	});
 	
 	$('#inv_idt_to1').change(function(){
@@ -410,6 +411,23 @@ date_default_timezone_set('Asia/Jakarta');
 		var id = 'inv_idt_to';
 		getpartyaliasInvoice(key, id);
 	});
+
+	function updatePosInv(val , idx){
+		// alert('tes');
+		fetch('<?= Url::base() ?>/job/get-pos-details?id=' + val)
+		.then(response => response.json())
+		.then(data => {
+			if(data){
+				$('#ppn-span-'+idx).text(data.detail_ppn_name + '-' + data.detail_ppn_amount + ' %');
+				$('#pph-span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
+				$('#pph-'+idx).val(data.detail_pph_id);
+				$('#ppn-'+idx).val(data.detail_ppn_id);
+			}
+			else{
+				alert('Data tidak ditemukan');
+			}
+		});
+	}
 	
 	//Ajax party
 	function getpartyInvoice(key, id){
@@ -470,7 +488,7 @@ date_default_timezone_set('Asia/Jakarta');
 				item += '</button>';
 			item += '</td>';
 			item += '<td>';
-				item += '<select class="form-select form-select-lg" id="pos-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pos]" required>';
+				item += '<select class="form-select form-select-lg" id="pos-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pos]" onchange="updatePosInv(this.value, '+i+')" required>';
 					item += '<option value="" disabled selected hidden></option>';
 					item += "<?php
 						foreach($pos as $row){
@@ -547,7 +565,7 @@ date_default_timezone_set('Asia/Jakarta');
 			
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg ppntype" id="ppntype-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_id_ppn]" onchange="getTotal()" required>';
-					item += "<label>" + "<?= ($ppn->name) != null ? $ppn->name : '' ?>" + " - " + "<?= ($ppn->amount) != null ? $ppn->amount : '' ?>" + "</label>" +"<?php
+					item += "<span id='ppn-span-" + i + "'>-</span>" +"<?php
 						//foreach($ppn as $row){
 							//$name = explode('-', $row['name']);
 							// $name_ppn = $row['name'].'-'.$row['amount'].'%';
@@ -564,11 +582,11 @@ date_default_timezone_set('Asia/Jakarta');
 						//}
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control ppn" id="ppn-'+i+'" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn]">';
+				item += '<input type="hidden" class="form-control ppn" id="ppn-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn]">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg ppntype" id="ppntype-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_id_ppn]" onchange="getTotal()" required>';
-					item += "<label>" + "<?= ($pph->name) != null ? $pph->name : '' ?>" + " - " + "<?= ($pph->amount) != null ? $pph->amount : '' ?>" + "</label>" +"<?php
+					item += "<span id='pph-span-" + i + "'>-</span>" +"<?php
 						//foreach($ppn as $row){
 							//$name = explode('-', $row['name']);
 							// $name_ppn = $row['name'].'-'.$row['amount'].'%';
@@ -585,7 +603,7 @@ date_default_timezone_set('Asia/Jakarta');
 						//}
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control pph" id="pph-'+i+'" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pph]">';
+				item += '<input type="hidden" class="form-control pph" id="pph-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pph]">';
 			item += '</td>';
 		item += '</tr>';
 		

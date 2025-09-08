@@ -136,7 +136,7 @@ date_default_timezone_set('Asia/Jakarta');
 								<tr>
 									<td class="text-center"></td>
 									<td>
-										<select class="form-select form-select-lg" id="cost_pos_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_pos]" required>
+										<select class="form-select form-select-lg" id="cost_pos_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_pos]" onchange="updatePos(this.value , 1)" required>
 											<option value="" disabled hidden></option>
 											<?php
 												foreach($pos as $row){
@@ -188,7 +188,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= ($ppn->name) != null ? $ppn->name : '' ?>-<?= ($ppn->amount) != null ? $ppn->amount : '' ?> %</span>
+										<span id="cost_ppn_misc_span-1">-</span>
 										<!-- <select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost_misc()" required>
 											<option value="0"></option> -->
 											<?php
@@ -207,7 +207,7 @@ date_default_timezone_set('Asia/Jakarta');
 										<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewCostmiscDetail[detail][1][vchd_ppn]">
 									</td>
 									<td>
-										<span><?= ($pph->name) != null ? $pph->name : '' ?>-<?= ($pph->amount) != null ? $pph->amount : '' ?> %</span>
+										<span id="cost_pph_misc_span-1">-</span>
 										<!-- <select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost_misc()" required>
 											<option value="0"></option> -->
 											<?php
@@ -285,6 +285,22 @@ date_default_timezone_set('Asia/Jakarta');
 <script>
 	$(document).ready(function(){
 	});
+
+	function updatePos(val , idx){
+		fetch('<?= Url::base() ?>/cost-other/get-pos-details?id=' + val)
+		.then(response => response.json())
+		.then(data => {
+			if(data){
+				$('#cost_ppn_misc_span-'+idx).text(data.detail_ppn_name + '-' + data.detail_ppn_amount + ' %');
+				$('#cost_pph_misc_span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
+				$('#cost_pph_misc-'+idx).val(data.detail_pph_id);
+				$('#cost_ppn_misc-'+idx).val(data.detail_ppn_id);
+			}
+			else{
+				alert('Data tidak ditemukan');
+			}
+		});
+	}
 	
 	function addrow_cost_misc(){
 		id = $('#table_cost_misc tbody tr').length-2;
@@ -303,7 +319,7 @@ date_default_timezone_set('Asia/Jakarta');
 				item += '</button>';
 			item += '</td>';
 			item += '<td>';
-				item += '<select class="form-select form-select-lg" id="cost_pos_misc-'+i+'" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_pos]" required>';
+				item += '<select class="form-select form-select-lg" id="cost_pos_misc-'+i+'" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_pos]" onchange="updatePos(this.value , '+i+')" required>';
 					item += '<option value="" disabled selected hidden></option>';
 					item += "<?php
 						foreach($pos as $row){
@@ -359,38 +375,16 @@ date_default_timezone_set('Asia/Jakarta');
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-'+i+'" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost_misc()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= ($ppn->name) != null ? $ppn->name : '' ?> + "-" + <?= ($ppn->amount) != null ? $ppn->amount : '' ?> + "<?php
-						// foreach($ppn as $row){
-						// 	$name = explode('-', $row['name']);
-						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
-							
-						// 	$selected = '';
-							
-						// 	echo "<option value='".$row['id']."' ".$selected.">".
-						// 		$name_ppn.
-						// 	"</option>";
-						// }
-					?>";
+					item += "<span id='cost_ppn_misc_span-"+i+"'>-</span>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-'+i+'" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-'+i+'" value="0" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_ppn]">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-'+i+'" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost_misc()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= ($pph->name) != null ? $pph->name : '' ?> + "-" + <?= ($pph->amount) != null ? $pph->amount : '' ?> + "<?php
-						// foreach($ppn as $row){
-						// 	$name = explode('-', $row['name']);
-						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
-							
-						// 	$selected = '';
-							
-						// 	echo "<option value='".$row['id']."' ".$selected.">".
-						// 		$name_ppn.
-						// 	"</option>";
-						// }
-					?>";
+					item += "<span id='cost_pph_misc_span-"+i+"'>-</span>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_pph_misc" id="cost_pph_misc-'+i+'" value="<?= ($pph->id) != null ? $pph->id : '' ?>" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_pph]">';
+				item += '<input type="hidden" class="form-control cost_pph_misc" id="cost_pph_misc-'+i+'" value="0" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_pph]">';
 			item += '</td>';
 		item += '</tr>';
 		
@@ -425,6 +419,7 @@ date_default_timezone_set('Asia/Jakarta');
 			getTotalCost_misc();
 		}
 	}
+
 	
 	function changeInputCost_misc(id){
 		idx = id.split('-')[1];
@@ -432,7 +427,7 @@ date_default_timezone_set('Asia/Jakarta');
 		jumlah 	= $('#cost_jumlah_misc-'+idx).val();
 		tarif1 	= $('#cost_tarif1_misc-'+idx).val();
 		tarif2 	= $('#cost_tarif2_misc-'+idx).val();
-		ppntype	= $('#cost_ppntype_misc-'+idx+' option:selected').html();
+		ppntype	= $('#cost_ppn_misc-'+idx).val();
 		
 		tarif = parseFloat(tarif1+'.'+tarif2);
 		
@@ -443,13 +438,13 @@ date_default_timezone_set('Asia/Jakarta');
 		}
 		
 		if(!jumlah){
-			jumlah = 0
+			jumlah = 0;	
 		}
 		if(!tarif){
-			tarif = 0
+			tarif = 0;
 		}
 		if(!ppn){
-			ppn = 0
+			ppn = 0;
 		}
 		
 		subtotal = jumlah * tarif;

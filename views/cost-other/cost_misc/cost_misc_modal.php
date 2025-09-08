@@ -558,6 +558,22 @@ date_default_timezone_set('Asia/Jakarta');
 <script>
 	$(document).ready(function(){
 	});
+
+	function updatePos(val , idx){
+		fetch('<?= Url::base() ?>/cost-other/get-pos-details?id=' + val)
+		.then(response => response.json())
+		.then(data => {
+			if(data){
+				$('#ppn-span-'+idx).text(data.detail_ppn_name + '-' + data.detail_ppn_amount + ' %');
+				$('#pph-span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
+				$('#pph-'+idx).val(data.detail_pph_id);
+				$('#ppn-'+idx).val(data.detail_ppn_id);
+			}
+			else{
+				alert('Data tidak ditemukan');
+			}
+		});
+	}
 	
 	function addrow_cost_hmc(){
 		id = $('#table_cost_hmc tbody tr').length-2;
