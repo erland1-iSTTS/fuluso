@@ -331,7 +331,8 @@ date_default_timezone_set('Asia/Jakarta');
 									<td>IDR</td>
 									<td>
 										<span id="ppn-span-1">-</span>
-										<input type="hidden" class="form-control ppn" id="ppn-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
+										<input type="hidden" class="form-control ppn ppn-invoice" id="ppn-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
+										<input type="hidden" class="form-control ppn-amount ppn-invoice" id="ppn-amount-1" value="0">
 									</td>
 									<td>
 										<span id="pph-span-1">-</span>
@@ -395,8 +396,10 @@ date_default_timezone_set('Asia/Jakarta');
 </div>
 
 <script>
+	var ppn_default_invoice = 11;
 	$(document).ready(function(){
 		// Bind the change event for initial pos select
+		//ppn_default = 10;
 	});
 	
 	$('#inv_idt_to1').change(function(){
@@ -422,6 +425,7 @@ date_default_timezone_set('Asia/Jakarta');
 				$('#pph-span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
 				$('#pph-'+idx).val(data.detail_pph_id);
 				$('#ppn-'+idx).val(data.detail_ppn_id);
+				ppn_default_invoice = data.detail_ppn_amount;
 			}
 			else{
 				alert('Data tidak ditemukan');
@@ -582,7 +586,8 @@ date_default_timezone_set('Asia/Jakarta');
 						//}
 					?>";
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control ppn" id="ppn-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn]">';
+				item += '<input type="hidden" class="form-control ppn ppn-invoice" id="ppn-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn]">';
+				item += '<input type="hidden" class="form-control ppn-amount ppn-invoice" id="ppn-amount-'+i+'" value="0">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg ppntype" id="ppntype-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_id_ppn]" onchange="getTotal()" required>';
@@ -638,6 +643,10 @@ date_default_timezone_set('Asia/Jakarta');
 			getTotal();
 		}
 	}
+
+	function cekdefaultppn(){
+		console.log(ppn_default_invoice);
+	}
 	
 	function changeInputInvoice(id){
 		idx = id.split('-')[1];
@@ -650,7 +659,7 @@ date_default_timezone_set('Asia/Jakarta');
 		tarif = parseFloat(tarif1+'.'+tarif2);
 		
 		// Use the fixed PPN amount
-		ppn = <?= $ppn->amount ?>;
+		//ppn = <?= $ppn->amount ?>;
 		
 		if(!basis){
 			basis = 0
@@ -664,15 +673,16 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		subtotal = basis * jumlah * tarif;
 		
-		if(ppn !== 0){
-			totalppn = Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
+		if(ppn_default_invoice !== 0){
+			totalppn = Math.floor(parseFloat(subtotal) * parseFloat(ppn_default_invoice) / 100);
+			//console.log(totalppn);
 		}else{
 			totalppn = 0;
 		}
 		
 		$('#label_subtotal-'+idx).html(addSeparator(subtotal.toFixed(2)));
 		$('#subtotal-'+idx).val(subtotal);
-		$('#ppn-'+idx).val(totalppn);
+		$('#ppn-amount-'+idx).val(totalppn);
 		
 		getTotal();
 	}
@@ -697,25 +707,30 @@ date_default_timezone_set('Asia/Jakarta');
 	});
 	
 	function getTotal(){
-		total = 0;
-		total_ppn = 0;
+		let total = 0;
+		let total_ppn = 0;
 		
-        $('.subtotal').each(function(index) {
+		// Sum all subtotals first
+		$('.subtotal').each(function(index) {
 			if($(this).val() == ''){
 				subtotal = 0;
 			}else{
-				subtotal = $(this).val();
+				subtotal = parseFloat($(this).val());
 			}
-			
-			// Use the fixed PPN amount from the PHP variable
-			ppn = <?= $ppn->amount ?>;
-			//alert(ppn);
-			
-			total += parseFloat(subtotal);
-			total_ppn += Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
-        });
+			total += subtotal;
+		});
+
+		// Sum all PPN values from hidden inputs
+		$('.ppn-amount').each(function(index) {
+			if($(this).val() == ''){
+				ppn_value = 0;
+			}else{
+				ppn_value = parseFloat($(this).val());
+			}
+			total_ppn += ppn_value;
+		});
 		
-		grandtotal = total + total_ppn;
+		let grandtotal = total + total_ppn;
 		
 		$('#label_total').html(addSeparator(total.toFixed(2)));
 		$('#total').val(total);

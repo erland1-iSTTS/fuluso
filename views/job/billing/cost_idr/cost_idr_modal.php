@@ -238,6 +238,7 @@ date_default_timezone_set('Asia/Jakarta');
 											?>
 										<!-- </select> -->
 										<input type="hidden" class="form-control cost_ppn" id="cost_ppn-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_ppn]">
+										<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-1" value="0">
 									</td>
 									<td>
 										<span id="cost_pph-span-1">-</span>
@@ -301,6 +302,7 @@ date_default_timezone_set('Asia/Jakarta');
 </div>
 
 <script>
+	var default_ppn_cost = 10;
 	$(document).ready(function(){
 	});
 	
@@ -413,6 +415,7 @@ date_default_timezone_set('Asia/Jakarta');
 					?>";
 				// item += '</select>';
 				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn-'+i+'" value="0" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-'+i+'" value="0">';
 			item += '</td>';
 			item += '<td>';
 					item += "<span id='cost_pph-span-" + i + "'>-</span>";
@@ -455,6 +458,7 @@ date_default_timezone_set('Asia/Jakarta');
 				$('#cost_pph-span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
 				$('#cost_pph-'+idx).val(data.detail_pph_id);
 				$('#cost_ppn-'+idx).val(data.detail_ppn_id);
+				default_ppn_cost = data.detail_ppn_amount;
 			}
 			else{
 				alert('Data tidak ditemukan');
@@ -481,10 +485,13 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		tarif = parseFloat(tarif1+'.'+tarif2);
 		
-		if(ppntype){
-			ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
-		}else{
-			ppn = 0;
+		// if(ppntype){
+		// 	ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
+		// }else{
+		// 	ppn = 0;
+		// }
+		if(default_ppn_cost){
+			ppn = default_ppn_cost;
 		}
 		
 		if(!basis){
@@ -510,7 +517,7 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		$('#cost_label_subtotal-'+idx).html(addSeparator(subtotal.toFixed(2)));
 		$('#cost_subtotal-'+idx).val(subtotal);
-		$('#cost_ppn-'+idx).val(totalppn);
+		$('#cost_ppn-amount-'+idx).val(totalppn);
 		
 		getTotalCost();
 	}
@@ -544,17 +551,21 @@ date_default_timezone_set('Asia/Jakarta');
 			}else{
 				subtotal = $(this).val();
 			}
-			
-			ppntype	= $('.cost_ppntype:eq('+index+') option:selected').html();
-			if(ppntype){
-				ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
-			}else{
-				ppn = 0;
-			}
+		
+			//ppn = default_ppn_cost;
 			
 			total += parseFloat(subtotal);
-			total_ppn += Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
+			//total_ppn += Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
         });
+
+		$('.cost_ppn-amount').each(function(index) {
+			if($(this).val() == ''){
+				ppn_value = 0;
+			}else{
+				ppn_value = parseFloat($(this).val());
+			}
+			total_ppn += ppn_value;
+		});
 		
 		grandtotal = total + total_ppn;
 		

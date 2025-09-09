@@ -31,7 +31,7 @@ $movement 	= Movement::find()->orderby(['movement_name'=>SORT_ASC])->all();
 $signature	= Signature::find()->where(['is_active'=>1])->orderby(['signature_name'=>SORT_ASC])->all();
 $office 	= Office::find()->all();
 $ppn		= PpnDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
-$pph		= PphDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
+$phh		= PphDetail::find()->where(['>=' , 'validity' , date('Y-m-d')])->one();
 
 date_default_timezone_set('Asia/Jakarta');
 ?>
@@ -132,7 +132,7 @@ date_default_timezone_set('Asia/Jakarta');
 								<tr>
 									<td class="text-center"></td>
 									<td>
-										<select class="form-select form-select-lg" id="cost_pos-1" name="MasterNewJobcostDetail[detail][1][vchd_pos]" required>
+										<select class="form-select form-select-lg" id="cost_pos-1" name="MasterNewJobcostDetail[detail][1][vchd_pos]" onchange="updatePosCost(this.value , 1)" required>
 											<option value="" disabled hidden></option>
 											<?php
 												foreach($pos as $row){
@@ -184,7 +184,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</td>
 									<td>IDR</td>
 									<td>
-										<span><?= $ppn->name.'-'.$ppn->amount ?></span>
+										<span id="cost_ppn_span-1"><?= $ppn->name.'-'.$ppn->amount ?></span>
 										<!-- <select class="form-select form-select-lg cost_ppntype" id="cost_ppntype-1" name="MasterNewJobcostDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost()" required>
 											<option value="0"></option>
 											<?php
@@ -201,9 +201,10 @@ date_default_timezone_set('Asia/Jakarta');
 											?>
 										</select> -->
 										<input type="hidden" class="form-control cost_ppn" id="cost_ppn-1" value="<?= $ppn->id ?>" name="MasterNewJobcostDetail[detail][1][vchd_ppn]">
+										<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-1" value="<?= $ppn->id ?>">
 									</td>
 									<td>
-										<span><?= $pph->name.'-'.$pph->amount ?></span>
+										<span id="cost_pph_span-1">-</span>
 										<!-- <select class="form-select form-select-lg cost_ppntype" id="cost_ppntype-1" name="MasterNewJobcostDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost()" required>
 											<option value="0"></option>
 											<?php
@@ -219,7 +220,7 @@ date_default_timezone_set('Asia/Jakarta');
 												// }
 											?>
 										</select> -->
-										<input type="hidden" class="form-control cost_ppn" id="cost_pph-1" value="<?= $pph->id ?>" name="MasterNewJobcostDetail[detail][1][vchd_pph]">
+										<input type="hidden" class="form-control cost_pph" id="cost_pph-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_pph]">
 									</td>
 								</tr>
 								
@@ -279,7 +280,8 @@ date_default_timezone_set('Asia/Jakarta');
 </div>
 
 <script>
-	$(document).ready(function(){
+	var default_ppn_cost = 10;
+		$(document).ready(function(){
 	});
 	
 	function addrow_cost_opr(){
@@ -299,7 +301,7 @@ date_default_timezone_set('Asia/Jakarta');
 				item += '</button>';
 			item += '</td>';
 			item += '<td>';
-				item += '<select class="form-select form-select-lg" id="cost_pos-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pos]" required>';
+				item += '<select class="form-select form-select-lg" id="cost_pos-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pos]" onchange="updatePosCost(this.value, '+i+')" required>';
 					item += '<option value="" disabled selected hidden></option>';
 					item += "<?php
 						foreach($pos as $row){
@@ -355,38 +357,17 @@ date_default_timezone_set('Asia/Jakarta');
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype" id="cost_ppntype-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= $ppn->name.'-'.$ppn->amount.'%' ?> + "<?php
-						// foreach($ppn as $row){
-						// 	$name = explode('-', $row['name']);
-						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
-							
-						// 	$selected = '';
-							
-						// 	echo "<option value='".$row['id']."' ".$selected.">".
-						// 		$name_ppn.
-						// 	"</option>";
-						// }
-					?>";
+					item += '<span id="cost_ppn_span-'+i+'">-</span>';
 				// item += '</select>';
 				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn-'+i+'" value="<?= $ppn->id ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-'+i+'" value="0">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype" id="cost_ppntype-'+i+'" name="MasterNewJobcostDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost()" required>';
 				// 	item += '<option value="0"></option>';
-					item += <?= $pph->name.'-'.$pph->amount.'%' ?> + "<?php
-						// foreach($ppn as $row){
-						// 	$name = explode('-', $row['name']);
-						// 	$name_ppn = $name[1].'-'.$row['amount'].'%';
-							
-						// 	$selected = '';
-							
-						// 	echo "<option value='".$row['id']."' ".$selected.">".
-						// 		$name_ppn.
-						// 	"</option>";
-						// }
-					?>";
+					item += '<span id="cost_pph_span-'+i+'">-</span>';
 				// item += '</select>';
-				item += '<input type="hidden" class="form-control cost_ppn" id="cost_pph-'+i+'" value="<?= $pph->id ?>" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph]">';
+				item += '<input type="hidden" class="form-control cost_ppn" id="cost_pph-'+i+'" value="0" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph]">';
 			item += '</td>';
 		item += '</tr>';
 		
@@ -428,14 +409,12 @@ date_default_timezone_set('Asia/Jakarta');
 		jumlah 	= $('#cost_jumlah-'+idx).val();
 		tarif1 	= $('#cost_tarif1-'+idx).val();
 		tarif2 	= $('#cost_tarif2-'+idx).val();
-		ppntype	= $('#cost_ppntype-'+idx+' option:selected').html();
+		//ppntype	= $('#cost_ppntype-'+idx+' option:selected').html();
 		
 		tarif = parseFloat(tarif1+'.'+tarif2);
 		
-		if(ppntype){
-			ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
-		}else{
-			ppn = 0;
+		if(default_ppn_cost){
+			ppn = default_ppn_cost;
 		}
 		
 		if(!jumlah){
@@ -458,7 +437,7 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		$('#cost_label_subtotal-'+idx).html(addSeparator(subtotal.toFixed(2)));
 		$('#cost_subtotal-'+idx).val(subtotal);
-		$('#cost_ppn-'+idx).val(totalppn);
+		$('#cost_ppn-amount-'+idx).val(totalppn);
 		
 		getTotalCost();
 	}
@@ -493,16 +472,25 @@ date_default_timezone_set('Asia/Jakarta');
 				subtotal = $(this).val();
 			}
 			
-			ppntype	= $('.cost_ppntype:eq('+index+') option:selected').html();
-			if(ppntype){
-				ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
-			}else{
-				ppn = 0;
-			}
+			// ppntype	= $('.cost_ppntype:eq('+index+') option:selected').html();
+			// if(ppntype){
+			// 	ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
+			// }else{
+			// 	ppn = 0;
+			// }
 			
 			total += parseFloat(subtotal);
-			total_ppn += Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
+			//total_ppn += Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
         });
+
+		$('.cost_ppn-amount').each(function(index) {
+			if($(this).val() == ''){
+				ppn_value = 0;
+			}else{
+				ppn_value = parseFloat($(this).val());
+			}
+			total_ppn += ppn_value;
+		});
 		
 		grandtotal = total + total_ppn;
 		

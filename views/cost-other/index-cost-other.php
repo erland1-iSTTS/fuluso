@@ -96,6 +96,25 @@ use app\models\MasterHakAkses;
 	$(document).ready(function(){
 		
 	});
+
+	function updatePosCost(val , idx){
+		fetch('<?= Url::base() ?>/cost-other/get-pos-details?id=' + val)
+		.then(response => {
+			return response.json();
+		})
+		.then(data => {
+			if(data){
+				$('#cost_ppn_span-'+idx).text(data.detail_ppn_name + '-' + data.detail_ppn_amount + ' %');
+				$('#cost_pph_span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
+				$('#cost_pph-'+idx).val(data.detail_pph_id);
+				$('#cost_ppn-'+idx).val(data.detail_ppn_id);
+				default_ppn_cost = data.detail_ppn_amount;
+			}
+			else{
+				alert('Data tidak ditemukan');
+			}
+		});
+	}
 	
 	function createCostMisc(){
 		$('#modal_cost_misc').modal({backdrop: 'static', keyboard: false});

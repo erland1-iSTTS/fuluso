@@ -204,11 +204,12 @@ date_default_timezone_set('Asia/Jakarta');
 												// }
 											?>
 										<!-- </select> -->
-										<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-1" value="<?= ($ppn->id) != null ? $ppn->id : '' ?>" name="MasterNewCostmiscDetail[detail][1][vchd_ppn]">
+										<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-1" value="0" name="MasterNewCostmiscDetail[detail][1][vchd_ppn]">
+										<input type="hidden" class="form-control cost_ppn_misc-amount" id="cost_ppn_misc-amount-1" value="0">
 									</td>
 									<td>
 										<span id="cost_pph_misc_span-1">-</span>
-										<!-- <select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_id_ppn]" onchange="getTotalCost_misc()" required>
+										<!-- <select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-1" name="MasterNewCostmiscDetail[detail][1][vchd_id_pph]" onchange="getTotalCost_misc()" required>
 											<option value="0"></option> -->
 											<?php
 												// foreach($ppn as $row){
@@ -283,6 +284,7 @@ date_default_timezone_set('Asia/Jakarta');
 </div>
 
 <script>
+	var default_ppn_misc = 10;
 	$(document).ready(function(){
 	});
 
@@ -295,6 +297,7 @@ date_default_timezone_set('Asia/Jakarta');
 				$('#cost_pph_misc_span-'+idx).text(data.detail_pph_name + '-' + data.detail_pph_amount + ' %');
 				$('#cost_pph_misc-'+idx).val(data.detail_pph_id);
 				$('#cost_ppn_misc-'+idx).val(data.detail_ppn_id);
+				default_ppn_misc = data.detail_ppn_amount;
 			}
 			else{
 				alert('Data tidak ditemukan');
@@ -378,6 +381,7 @@ date_default_timezone_set('Asia/Jakarta');
 					item += "<span id='cost_ppn_misc_span-"+i+"'>-</span>";
 				// item += '</select>';
 				item += '<input type="hidden" class="form-control cost_ppn_misc" id="cost_ppn_misc-'+i+'" value="0" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_ppn]">';
+				item += '<input type="hidden" class="form-control cost_ppn_misc-amount" id="cost_ppn_misc-amount-'+i+'" value="0">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg cost_ppntype_misc" id="cost_ppntype_misc-'+i+'" name="MasterNewCostmiscDetail[detail]['+i+'][vchd_id_ppn]" onchange="getTotalCost_misc()" required>';
@@ -431,10 +435,8 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		tarif = parseFloat(tarif1+'.'+tarif2);
 		
-		if(ppntype){
-			ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
-		}else{
-			ppn = 0;
+		if(default_ppn_misc){
+			ppn = default_ppn_misc;
 		}
 		
 		if(!jumlah){
@@ -457,7 +459,7 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		$('#cost_label_subtotal_misc-'+idx).html(addSeparator(subtotal.toFixed(2)));
 		$('#cost_subtotal_misc-'+idx).val(subtotal);
-		$('#cost_ppn_misc-'+idx).val(totalppn);
+		$('#cost_ppn_misc-amount-'+idx).val(totalppn);
 		
 		getTotalCost_misc();
 	}
@@ -492,16 +494,17 @@ date_default_timezone_set('Asia/Jakarta');
 				subtotal = $(this).val();
 			}
 			
-			ppntype	= $('.cost_ppntype_misc:eq('+index+') option:selected').html();
-			if(ppntype){
-				ppn = parseFloat(ppntype.split('-')[1].replace('%',''));
-			}else{
-				ppn = 0;
-			}
-			
 			total += parseFloat(subtotal);
-			total_ppn += Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
         });
+
+		$('.cost_ppn_misc-amount').each(function(index) {
+			if($(this).val() == ''){
+				ppn_value = 0;
+			}else{
+				ppn_value = parseFloat($(this).val());
+			}
+			total_ppn += ppn_value;
+		});
 		
 		grandtotal = total + total_ppn;
 		
