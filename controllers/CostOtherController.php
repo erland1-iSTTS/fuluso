@@ -119,10 +119,10 @@ class CostOtherController extends BaseController
 						$detail->vchd_amount = $row['vchd_amount'];
 						$detail->vchd_sector = '-';
 						$detail->vchd_exch = '-';
-						$detail->vchd_id_ppn = $row['vchd_id_ppn'];
-						$detail->vchd_ppn = $row['vchd_ppn'];
-						$detail->vchd_id_pph = $row['vchd_id_pph'];
-						$detail->vchd_pph = $row['vchd_pph'];
+						$detail->vchd_id_ppn = $row['vchd_ppn'];
+						$detail->vchd_ppn = $row['vchd_ppn_amount'];
+						$detail->vchd_id_pph = $row['vchd_pph'];
+						$detail->vchd_pph = $row['vchd_pph_amount'];
 						$detail->vchd_is_active = 1;
 						$detail->save();
 						
@@ -321,10 +321,10 @@ class CostOtherController extends BaseController
 						$detail->vchd_amount = $row['vchd_amount'];
 						// $detail->vchd_sector = '-';
 						// $detail->vchd_exch = '-';
-						$detail->vchd_id_ppn = $row['vchd_id_ppn'];
-						$detail->vchd_ppn = $row['vchd_ppn'];
-						$detail->vchd_id_pph = $row['vchd_id_pph'];
-						$detail->vchd_pph = $row['vchd_pph'];
+						$detail->vchd_id_ppn = $row['vchd_ppn'];
+						$detail->vchd_ppn = $row['vchd_ppn_amount'];
+						$detail->vchd_id_pph = $row['vchd_pph'];
+						$detail->vchd_pph = $row['vchd_pph_amount'];
 						$detail->vchd_is_active = 1;
 						$detail->save();
 						

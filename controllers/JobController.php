@@ -1069,10 +1069,10 @@ class JobController extends BaseController
 						$detail->invd_amount = $row['invd_amount'];
 						$detail->invd_sector = '-';
 						$detail->invd_exch = '-';
-						$detail->invd_id_ppn = $row['invd_id_ppn'];
-						$detail->invd_ppn = $row['invd_ppn'];
-						$detail->invd_id_pph = $row['invd_id_pph'];
-						$detail->invd_pph = $row['invd_pph'];
+						$detail->invd_id_ppn = $row['invd_ppn'];
+						$detail->invd_ppn = $row['invd_ppn_amount'];
+						$detail->invd_id_pph = $row['invd_pph'];
+						$detail->invd_pph = $row['invd_pph_amount'];
 						$detail->invd_is_active = 1;
 						$detail->save();
 						
@@ -1369,10 +1369,10 @@ class JobController extends BaseController
 						$detail->vchd_amount = $row['vchd_amount'];
 						$detail->vchd_sector = '-';
 						$detail->vchd_exch = '-';
-						$detail->vchd_id_ppn = $row['vchd_id_ppn'];
-						$detail->vchd_ppn = $row['vchd_ppn'];
-						$detail->vchd_pph = $row['vchd_pph'];
-						$detail->vchd_id_pph = $row['vchd_id_pph'];
+						$detail->vchd_id_ppn = $row['vchd_ppn'];
+						$detail->vchd_ppn = $row['vchd_ppn_amount'];
+						$detail->vchd_pph = $row['vchd_pph_amount'];
+						$detail->vchd_id_pph = $row['vchd_pph'];
 						$detail->vchd_is_active = 1;
 						$detail->save();
 						

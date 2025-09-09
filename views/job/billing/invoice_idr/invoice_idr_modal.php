@@ -332,11 +332,12 @@ date_default_timezone_set('Asia/Jakarta');
 									<td>
 										<span id="ppn-span-1">-</span>
 										<input type="hidden" class="form-control ppn ppn-invoice" id="ppn-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn]">
-										<input type="hidden" class="form-control ppn-amount ppn-invoice" id="ppn-amount-1" value="0">
+										<input type="hidden" class="form-control ppn-amount ppn-invoice" id="ppn-amount-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_ppn_amount]">
 									</td>
 									<td>
 										<span id="pph-span-1">-</span>
 										<input type="hidden" class="form-control pph" id="pph-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_pph]">
+										<input type="hidden" class="form-control pph" id="pph-amount-1" value="0" name="MasterNewJobinvoiceDetail[detail][1][invd_pph_amount]">
 									</td>
 								</tr>
 								
@@ -397,6 +398,7 @@ date_default_timezone_set('Asia/Jakarta');
 
 <script>
 	var ppn_default_invoice = 11;
+	var ppn_default_invoice = 10;
 	$(document).ready(function(){
 		// Bind the change event for initial pos select
 		//ppn_default = 10;
@@ -426,6 +428,8 @@ date_default_timezone_set('Asia/Jakarta');
 				$('#pph-'+idx).val(data.detail_pph_id);
 				$('#ppn-'+idx).val(data.detail_ppn_id);
 				ppn_default_invoice = data.detail_ppn_amount;
+				pph_default_invoice = data.detail_pph_amount;
+				changeInputInvoice('#ppntes-'+idx);
 			}
 			else{
 				alert('Data tidak ditemukan');
@@ -587,7 +591,7 @@ date_default_timezone_set('Asia/Jakarta');
 					?>";
 				// item += '</select>';
 				item += '<input type="hidden" class="form-control ppn ppn-invoice" id="ppn-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn]">';
-				item += '<input type="hidden" class="form-control ppn-amount ppn-invoice" id="ppn-amount-'+i+'" value="0">';
+				item += '<input type="hidden" class="form-control ppn-amount ppn-invoice" id="ppn-amount-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_ppn_amount]">';
 			item += '</td>';
 			item += '<td>';
 				// item += '<select class="form-select form-select-lg ppntype" id="ppntype-'+i+'" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_id_ppn]" onchange="getTotal()" required>';
@@ -609,6 +613,7 @@ date_default_timezone_set('Asia/Jakarta');
 					?>";
 				// item += '</select>';
 				item += '<input type="hidden" class="form-control pph" id="pph-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pph]">';
+				item += '<input type="hidden" class="form-control pph" id="pph-amount-'+i+'" value="0" name="MasterNewJobinvoiceDetail[detail]['+i+'][invd_pph_amount]">';
 			item += '</td>';
 		item += '</tr>';
 		
@@ -659,8 +664,8 @@ date_default_timezone_set('Asia/Jakarta');
 		tarif = parseFloat(tarif1+'.'+tarif2);
 		
 		// Use the fixed PPN amount
-		//ppn = <?= $ppn->amount ?>;
-		
+		ppn = <?= $ppn->amount ?>;
+
 		if(!basis){
 			basis = 0
 		}
@@ -675,7 +680,8 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		if(ppn_default_invoice !== 0){
 			totalppn = Math.floor(parseFloat(subtotal) * parseFloat(ppn_default_invoice) / 100);
-			//console.log(totalppn);
+			totalpph = Math.floor(parseFloat(subtotal) * parseFloat(pph_default_invoice) / 100);
+			console.log(totalppn);
 		}else{
 			totalppn = 0;
 		}
@@ -683,6 +689,7 @@ date_default_timezone_set('Asia/Jakarta');
 		$('#label_subtotal-'+idx).html(addSeparator(subtotal.toFixed(2)));
 		$('#subtotal-'+idx).val(subtotal);
 		$('#ppn-amount-'+idx).val(totalppn);
+		$('#pph-amount-'+idx).val(totalpph);
 		
 		getTotal();
 	}

@@ -238,11 +238,12 @@ date_default_timezone_set('Asia/Jakarta');
 											?>
 										<!-- </select> -->
 										<input type="hidden" class="form-control cost_ppn" id="cost_ppn-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_ppn]">
-										<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-1" value="0">
+										<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_ppn_amount]">
 									</td>
 									<td>
 										<span id="cost_pph-span-1">-</span>
 										<input type="hidden" class="form-control cost_pph" id="cost_pph-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_pph]">
+										<input type="hidden" class="form-control cost_pph" id="cost_pph_amount-1" value="0" name="MasterNewJobcostDetail[detail][1][vchd_pph_amount]">
 									</td>
 								</tr>
 								
@@ -303,6 +304,7 @@ date_default_timezone_set('Asia/Jakarta');
 
 <script>
 	var default_ppn_cost = 10;
+	var default_pph_cost = 10;
 	$(document).ready(function(){
 	});
 	
@@ -415,11 +417,12 @@ date_default_timezone_set('Asia/Jakarta');
 					?>";
 				// item += '</select>';
 				item += '<input type="hidden" class="form-control cost_ppn" id="cost_ppn-'+i+'" value="0" name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn]">';
-				item += '<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-'+i+'" value="0">';
+				item += '<input type="hidden" class="form-control cost_ppn-amount" id="cost_ppn-amount-'+i+'" value="0"> name="MasterNewJobcostDetail[detail]['+i+'][vchd_ppn_amount]"';
 			item += '</td>';
 			item += '<td>';
 					item += "<span id='cost_pph-span-" + i + "'>-</span>";
 				item += '<input type="hidden" class="form-control cost_pph" id="cost_pph-'+i+'" value="0" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph]">';
+				item += '<input type="hidden" class="form-control cost_pph_amount" id="cost_pph_amount-'+i+'" value="0" name="MasterNewJobcostDetail[detail]['+i+'][vchd_pph_amount]">';
 			item += '</td>';
 		item += '</tr>';
 		
@@ -459,6 +462,8 @@ date_default_timezone_set('Asia/Jakarta');
 				$('#cost_pph-'+idx).val(data.detail_pph_id);
 				$('#cost_ppn-'+idx).val(data.detail_ppn_id);
 				default_ppn_cost = data.detail_ppn_amount;
+				default_pph_cost = data.detail_pph_amount;
+				changeInputCost('#ppntes-'+idx);
 			}
 			else{
 				alert('Data tidak ditemukan');
@@ -492,6 +497,7 @@ date_default_timezone_set('Asia/Jakarta');
 		// }
 		if(default_ppn_cost){
 			ppn = default_ppn_cost;
+			pph = default_pph_cost;
 		}
 		
 		if(!basis){
@@ -511,6 +517,7 @@ date_default_timezone_set('Asia/Jakarta');
 		
 		if(ppn !== 0){
 			totalppn = Math.floor(parseFloat(subtotal) * parseFloat(ppn) / 100);
+			totalpph = Math.floor(parseFloat(subtotal) * parseFloat(pph) / 100);
 		}else{
 			totalppn = 0;
 		}
@@ -518,6 +525,7 @@ date_default_timezone_set('Asia/Jakarta');
 		$('#cost_label_subtotal-'+idx).html(addSeparator(subtotal.toFixed(2)));
 		$('#cost_subtotal-'+idx).val(subtotal);
 		$('#cost_ppn-amount-'+idx).val(totalppn);
+		$('#cost_pph_amount-'+idx).val(totalpph);
 		
 		getTotalCost();
 	}

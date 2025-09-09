@@ -109,6 +109,8 @@ use app\models\MasterHakAkses;
 				$('#cost_pph-'+idx).val(data.detail_pph_id);
 				$('#cost_ppn-'+idx).val(data.detail_ppn_id);
 				default_ppn_cost = data.detail_ppn_amount;
+				default_pph_cost = data.detail_pph_amount;
+				changeInputCost('#tesppn-'+idx);
 			}
 			else{
 				alert('Data tidak ditemukan');
